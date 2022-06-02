@@ -11,6 +11,6 @@ spec:
           env:
             - name: WEBSITE_URL
               value: http://nginx-service:8080
-          image: robots:1
-          imagePullPolicy: Never
+          image: ghcr.io/johannessarpola/k8s-nginx-robottests:1.0
+          imagePullPolicy: IfNotPresent
 #  backoffLimit: 3
