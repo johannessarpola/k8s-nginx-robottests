@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: robot-framework-cronjob
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+      spec:
+        template:
+          spec:
+            restartPolicy: Never
+            containers:
+              - name: robot-framework-cronjob
+                env:
+                  - name: WEBSITE_URL
+                    value: http://nginx-service:8080
+                image: robots:1
+                imagePullPolicy: Never
+#  backoffLimit: 3

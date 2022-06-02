@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: robot-framework-batchjob
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: robot-framework-batchjob
+          env:
+            - name: WEBSITE_URL
+              value: http://nginx-service:8080
+          image: robots:1
+          imagePullPolicy: Never
+#  backoffLimit: 3
