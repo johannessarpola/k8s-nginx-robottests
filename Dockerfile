@@ -25,6 +25,6 @@ WORKDIR /home/pwuser/
 ADD uploader.py .
 ADD tests tests
 
-CMD ["./run"]
+CMD ["./run.sh"]
 
 # Upload the report somehow to somewhere
