@@ -3,19 +3,36 @@ kind: CronJob
 metadata:
   name: robot-framework-cronjob
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/1 * * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   jobTemplate:
       spec:
         template:
           spec:
+            volumes:
+              - name: cert
+                secret:
+                  secretName: minio-crt
             restartPolicy: Never
             containers:
               - name: robot-framework-cronjob
                 env:
                   - name: WEBSITE_URL
                     value: http://nginx-service:8080
-                image: ghcr.io/johannessarpola/k8s-nginx-robottests:1.0
+                  - name: MINIO_ACCESS_KEY
+                    valueFrom:
+                      secretKeyRef:
+                        key: root-user
+                        name: minio
+                  - name: MINIO_SECRET_KEY
+                    valueFrom:
+                      secretKeyRef:
+                        key: root-password
+                        name: minio
+                image: ghcr.io/johannessarpola/k8s-nginx-robottests:1.1
                 imagePullPolicy: IfNotPresent
-#  backoffLimit: 3
+                volumeMounts:
+                  - name: cert
+                    mountPath: "/certs/ca.crt"
+                    subPath: ca.crt
