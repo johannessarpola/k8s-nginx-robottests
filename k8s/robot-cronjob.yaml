@@ -30,7 +30,7 @@ spec:
                       secretKeyRef:
                         key: root-password
                         name: minio
-                image: ghcr.io/johannessarpola/k8s-nginx-robottests:1.1
+                image: ghcr.io/johannessarpola/k8s-nginx-robottests:1.2
                 imagePullPolicy: IfNotPresent
                 volumeMounts:
                   - name: cert
