@@ -22,29 +22,22 @@ def main():
 
     client = Minio(
         MINIO_URL,
-        #access_key="noTI4ejOP8I9s99t",
         access_key=MINIO_ACCESS_KEY,
-        #secret_key="OeSYaMg5yFAjUG5yjh8Pv60a1wcKNBBk",
         secret_key=MINIO_SECRET_KEY,
         secure=True,
         http_client=httpClient
     )
     
     bucket_name = "robot-reports"
-    #file_name = "/home/pwuser/report.html"
     file_name = "report.html"
     destination_file_name = "report.html"
 
-    # Make 'asiatrip' bucket if not exist.
     found = client.bucket_exists(bucket_name)
     if not found:
         client.make_bucket(bucket_name)
     else:
         print(f"Bucket {bucket_name} already exists")
 
-
-    # Upload '/home/user/Photos/asiaphotos.zip' as object name
-    # 'asiaphotos-2015.zip' to bucket 'asiatrip'.
     client.fput_object(
         bucket_name, destination_file_name, file_name,
     )
