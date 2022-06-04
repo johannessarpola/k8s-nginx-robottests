@@ -8,8 +8,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  NGINX_PAGE_IMAGE: robot-report
-  DOWNLOADER_IMAGE: robot-report-downloader
+  REPORT_TAG_PREFIX: web
+  DOWNLOADER_TAG_PREFIX: dl
 
 jobs:
   build:
@@ -51,6 +51,17 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta-reports
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern=${{REPORT_TAG_PREFIX}}-{{version}}
+            type=semver,pattern=${{REPORT_TAG_PREFIX}}-{{major}}.{{minor}}
+
       - name: Build and push Docker robort-report
         uses: docker/build-push-action@v2
         with:
@@ -58,11 +69,22 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           file: Reportpage.Dockerfile
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.NGINX_PAGE_IMAGE }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.NGINX_PAGE_IMAGE }}:buildcache,mode=max
+          tags: ${{ steps.meta-reports.outputs.tags }}
+          labels: ${{ steps.meta-reports.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{REPORT_TAG_PREFIX}}-buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{REPORT_TAG_PREFIX}}-buildcache,mode=max
       
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta-downloader
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern=${{DOWNLOADER_TAG_PREFIX}}-{{version}}
+            type=semver,pattern=${{DOWNLOADER_TAG_PREFIX}}-{{major}}.{{minor}}
+
       - name: Build and push Docker robort-report
         uses: docker/build-push-action@v2
         with:
@@ -70,7 +92,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           file: Downloader.Dockerfile
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.DOWNLOADER_IMAGE }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.DOWNLOADER_IMAGE }}:buildcache,mode=max
+          tags: ${{ steps.meta-downloader.outputs.tags }}
+          labels: ${{ steps.meta-downloader.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{DOWNLOADER_TAG_PREFIX}}-buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{DOWNLOADER_TAG_PREFIX}}-buildcache,mode=max
