@@ -12,12 +12,16 @@ install-minio:
 uninstall-minio:
 		helm uninstall minio
 
-.PHONY: uninstall-minio
+.PHONY: delete-jobs
 delete-jobs:
 		kubectl delete --all jobs
 		kubectl delete --all cronjobs
 
-.PHONY: uninstall-minio
+.PHONY: create-jobs
 create-jobs:
 		kubectl apply -f k8s/robot-batchjob.yaml
 		kubectl apply -f k8s/robot-cronjob.yaml
+
+.PHONY: restart-html
+restart-html:
+		 kubectl rollout restart deployment/nginx-reports-deployment
