@@ -34,7 +34,6 @@ def main():
     downloaded_filename = "report.html"
     remote_file_name = "report.html"
 
-    # Make 'asiatrip' bucket if not exist.
     found = client.bucket_exists(bucket_name)
     if not found:
         client.make_bucket(bucket_name)
