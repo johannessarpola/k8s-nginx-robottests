@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-reports-deployment
+  labels:
+    app: nginx-reports
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-reports
+  template:
+    metadata:
+      labels:
+        app: nginx-reports
+    spec:
+      volumes:
+      - name: workdir
+        emptyDir: {}
+      - name: cert
+        secret:
+          secretName: minio-crt
+      initContainers:
+      - name: download-report
+        image: downloader:1
+        env:
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                key: root-user
+                name: minio
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: root-password
+                name: minio
+        volumeMounts:
+          - name: workdir
+            mountPath: /app/html/
+          - name: cert
+            mountPath: "/certs/ca.crt"
+            subPath: ca.crt
+      containers:
+      - name: nginx-reports
+        image: page:1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
+        volumeMounts:
+          - name: workdir
+            mountPath: /usr/share/nginx/html/
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-reports-service
+spec:
+  selector:
+    app: nginx-reports
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80
