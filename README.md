@@ -1,5 +1,7 @@
 # PoC to run robot tests in Kubernetes context
 
+⚠️ **Only for demonstation purposes.**
+
 Solution
 - Nginx containers are tested with simple `tests/nginx/nginx.robot` tests which checks that the default homepage is shown on addres specified in env `WEBSITE_URL`
 - Tests are run as a `kind: CronJob` and `kind: Job` inside the namespace
@@ -30,7 +32,7 @@ To view the `report.html`robot report you can use `kubectl port-forward deployme
 # Install Minio
 
 `helm`folder contains some default values to run Minio with helm template. Commands can be run with `make add-registry` and 
-`make install-minio` to default namespace. Only for demonstation purposes.
+`make install-minio` to default namespace.
 
 # Install the nginx to be tested
 
