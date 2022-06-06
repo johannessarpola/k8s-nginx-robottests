@@ -2,7 +2,7 @@ nameOverride: "minio"
 mode: standalone
 auth:
   rootUser: admin
-  useCredentialsFiles: truee
+  useCredentialsFiles: true
 
 tls:
   enabled: true
