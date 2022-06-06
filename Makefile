@@ -1,12 +1,12 @@
 
 .PHONY: add-registry
 add-registry:
-		helm repo add bitnami https://charts.bitnami.com/bitnami"
+		helm repo add bitnami "https://charts.bitnami.com/bitnami"
 
 .PHONY: install-minio
 install-minio:
 		helm repo update
-		helm install minio bitnami/minio -f .\helm\minio-bitnami-values.yaml
+		helm install minio bitnami/minio -f ./helm/minio-bitnami-values.yaml
 
 .PHONY: uninstall-minio
 uninstall-minio:
@@ -16,6 +16,14 @@ uninstall-minio:
 delete-jobs:
 		kubectl delete --all jobs
 		kubectl delete --all cronjobs
+
+.PHONY: install-nginx
+install-nginx:
+		kubectl apply -f k8s/nginx.yaml
+
+.PHONY: install-nginx-reports
+install-nginx-reports:
+		kubectl apply -f k8s/nginx-reports.yaml
 
 .PHONY: create-jobs
 create-jobs:
