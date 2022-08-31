@@ -1,0 +1,4 @@
+{
+  "targets": ["http://web1", "http://web2"],
+  "message": "Welcome to nginx!"
+}

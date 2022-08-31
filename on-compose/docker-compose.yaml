@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  web1:
+    container_name: web1
+    image: "nginx:latest"
+    ports:
+      - "8001:80"
+    networks:
+      - internal
+  web2:
+    container_name: web2
+    image: "nginx:latest"
+    ports:
+      - "8002:80"
+    networks:
+      - internal
+  robot:
+    image: robot:local
+    environment:
+      - SOURCE_FILE=/home/pwuser/data/config.json
+    networks:
+      - internal
+    volumes:
+      - ${PWD}/data/:/home/pwuser/data
+  ubuntu:
+    image: ubuntu:latest
+    command: tail -F anything
+    networks:
+      - internal
+networks:
+  internal:  
