@@ -17,7 +17,8 @@ services:
   robot:
     image: robot:local
     environment:
-      - SOURCE_FILE=/home/pwuser/data/config.json
+      # - SOURCE_FILE=/home/pwuser/data/config.json
+      - SOURCE_FILE=/home/pwuser/data/config.yaml
     networks:
       - internal
     volumes:
