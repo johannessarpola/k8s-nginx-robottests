@@ -12,6 +12,9 @@ USER pwuser
 
 RUN python3 -m pip install --user robotframework
 RUN python3 -m pip install --user robotframework-browser
+RUN python3 -m pip install --user robotframework-requests
+RUN python3 -m pip install --user robotframework-kubelibrary
+RUN python3 -m pip install --user PyYAML
 
 # Upload to minio
 RUN python3 -m pip install --user install minio

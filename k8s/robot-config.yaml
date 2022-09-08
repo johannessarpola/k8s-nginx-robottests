@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: robot-config
+  labels:
+    app: robot
+data:
+  config.yaml: |-
+    targets: 
+      - http://nginx-service:8080
+    message: Welcome to nginx!
+

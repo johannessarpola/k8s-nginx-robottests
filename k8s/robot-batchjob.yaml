@@ -5,14 +5,20 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: robot-account
       volumes:
         - name: cert
           secret:
             secretName: minio-crt
+        - name: config
+          configMap:
+            name: robot-config
       restartPolicy: Never
       containers:
         - name: robot-framework-batchjob
           env:
+            - name: SOURCE_FILE
+              value: /config/config.yaml
             - name: WEBSITE_URL
               value: http://nginx-service:8080
             - name: MINIO_ACCESS_KEY
@@ -31,5 +37,8 @@ spec:
             - name: cert
               mountPath: "/certs/ca.crt"
               subPath: ca.crt
+            - name: config
+              mountPath: "/config/"
+              readOnly: true
   backoffLimit: 0
   
