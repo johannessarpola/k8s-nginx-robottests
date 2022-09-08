@@ -1,5 +1,9 @@
 *** Settings ***
 Library   Browser
+Library   Collections
+Library   String
+Library   OperatingSystem
+Library   yaml
 
 *** Variables ***
 ${url}          %{WEBSITE_URL}
