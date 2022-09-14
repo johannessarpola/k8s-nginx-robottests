@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: robot-framework-batchjob
+  generateName: robot-framework-batchjob-
 spec:
   template:
     spec:
