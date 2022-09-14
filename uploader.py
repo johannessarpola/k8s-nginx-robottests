@@ -29,8 +29,7 @@ def main():
     )
     
     bucket_name = "robot-reports"
-    file_name = "report.html"
-    destination_file_name = "report.html"
+    file_names = ["report.html", "log.html", "output.xml"]
 
     found = client.bucket_exists(bucket_name)
     if not found:
@@ -38,13 +37,14 @@ def main():
     else:
         print(f"Bucket {bucket_name} already exists")
 
-    client.fput_object(
-        bucket_name, destination_file_name, file_name,
-    )
-    print(
-        f"'{file_name}' is successfully uploaded as "
-        f"object '{destination_file_name}' to bucket '{bucket_name}'."
-    )
+    for file_name in file_names:
+        client.fput_object(
+            bucket_name, file_name, file_name,
+        )
+        print(
+            f"'{file_name}' is successfully uploaded as "
+            f"object '{file_name}' to bucket '{bucket_name}'."
+        )
 
 
 if __name__ == "__main__":

@@ -31,8 +31,7 @@ def main():
     )
     
     bucket_name = "robot-reports"
-    downloaded_filename = "report.html"
-    remote_file_name = "report.html"
+    remote_file_names = ["report.html", "log.html"]
 
     found = client.bucket_exists(bucket_name)
     if not found:
@@ -40,17 +39,15 @@ def main():
     else:
         print(f"Bucket {bucket_name} already exists")
 
-    client.fget_object(bucket_name, remote_file_name, downloaded_filename)
-    
-    print(
-        f"'{remote_file_name}' is successfully downloades as "
-        f"object '{downloaded_filename}' from bucket '{bucket_name}'."
-    )
+    for file_name in remote_file_names:
+        client.fget_object(bucket_name, file_name, file_name)
+        print(
+            f"'{file_name}' is successfully downloades as "
+            f"object '{file_name}' from bucket '{bucket_name}'."
+        )
 
-    shutil.copyfile(downloaded_filename, DESTINATION_FILE)
-
-    print(f"Copied {downloaded_filename} to {DESTINATION_FILE}")
-
+        shutil.copyfile(file_name, DESTINATION_FILE)
+        print(f"Copied {file_name} to {DESTINATION_FILE}")
 
 if __name__ == "__main__":
     main()
