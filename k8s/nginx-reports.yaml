@@ -22,7 +22,7 @@ spec:
           secretName: minio-crt
       containers:
       - name: download-report
-        image: ghcr.io/johannessarpola/k8s-nginx-robottests:dl-1.3
+        image: ghcr.io/johannessarpola/k8s-nginx-robottests:dl-1.5
         env:
           - name: MINIO_ACCESS_KEY
             valueFrom:
@@ -48,7 +48,7 @@ spec:
             memory: "64Mi"
             cpu: "250m"
       - name: nginx-reports
-        image: ghcr.io/johannessarpola/k8s-nginx-robottests:web-1.3
+        image: ghcr.io/johannessarpola/k8s-nginx-robottests:web-1.5
         ports:
         - containerPort: 80
         resources:
