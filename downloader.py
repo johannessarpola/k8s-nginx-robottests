@@ -7,7 +7,7 @@ import shutil
 MINIO_URL = os.getenv('MINIO_URL', "minio:9000")
 MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY')
 MINIO_SECRET_KEY = os.getenv('MINIO_SECRET_KEY')
-DESTINATION_FILE = os.getenv('DESTINATION_FOLDER', "/app/html/index.html")
+DESTINATION_FOLDER = os.getenv('DESTINATION_FOLDER', "/app/html/")
 
 def main():
     httpClient = urllib3.PoolManager(
@@ -33,6 +33,10 @@ def main():
     bucket_name = "robot-reports"
     remote_file_names = ["report.html", "log.html"]
 
+    file_renames = {
+        "report.html" : "index.html",
+    }
+
     found = client.bucket_exists(bucket_name)
     if not found:
         client.make_bucket(bucket_name)
@@ -46,8 +50,12 @@ def main():
             f"object '{file_name}' from bucket '{bucket_name}'."
         )
 
-        shutil.copyfile(file_name, DESTINATION_FILE)
-        print(f"Copied {file_name} to {DESTINATION_FILE}")
+        destination_file = os.path.join(DESTINATION_FOLDER, file_name)
+        if file_name in file_renames:
+            destination_file = os.path.join(DESTINATION_FOLDER, file_renames.get(file_name))
+        
+        shutil.copyfile(file_name, destination_file)
+        print(f"Copied {file_name} to {destination_file}")
 
 if __name__ == "__main__":
     main()
