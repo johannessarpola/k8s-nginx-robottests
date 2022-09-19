@@ -27,5 +27,6 @@ ENV PATH="/home/pwuser/.local/bin:${PATH}"
 WORKDIR /home/pwuser/
 ADD uploader.py .
 ADD tests tests
+RUN mkdir out
 
 CMD ["./run.sh"]
